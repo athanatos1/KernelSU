@@ -366,30 +366,3 @@ void ksu_sucompat_exit()
 #endif
 }
 
-
-#ifdef CONFIG_KSU_SUSFS_SUS_SU
-#ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-extern bool ksu_devpts_hook;
-#endif // #ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-
-void ksu_susfs_disable_sus_su(void) {
-	enable_kprobe(&execve_kp);
-	enable_kprobe(&newfstatat_kp);
-	enable_kprobe(&faccessat_kp);
-#ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-	enable_kprobe(&pts_unix98_lookup_kp);
-	ksu_devpts_hook = false;
-#endif // #ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-}
-
-void ksu_susfs_enable_sus_su(void) {
-	disable_kprobe(&execve_kp);
-	disable_kprobe(&newfstatat_kp);
-	disable_kprobe(&faccessat_kp);
-#ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-	disable_kprobe(&pts_unix98_lookup_kp);
-	ksu_devpts_hook = true;
-#endif // #ifndef CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT
-}
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_SU
-
